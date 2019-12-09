@@ -1,0 +1,14 @@
+[user]
+	name = Mischa Holz
+	email = me@mhlz.de
+	signingkey = 5BD220A328CE4C343487C6711E504BB4A0C7E348
+[push]
+	followTags = true
+[alias]
+	tree = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all
+[credential]
+	helper = osxkeychain
+[url "git@gitlab.com:"]
+	insteadOf = https://gitlab.com/
+[commit]
+	gpgsign = true
