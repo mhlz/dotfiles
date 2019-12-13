@@ -25,17 +25,23 @@ Plug 'tpope/vim-surround'
 
 " Plug 'mhartington/oceanic-next'
 " Plug 'artanikin/vim-synthwave84'
-Plug 'isobit/vim-darcula-colors'
+" Plug 'isobit/vim-darcula-colors'
+" Plug 'jcorbin/darkula'
 
 Plug 'scrooloose/nerdtree'
 
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 
-Plug 'pangloss/vim-javascript'
+Plug 'othree/yajs.vim'
+Plug 'othree/es.next.syntax.vim'
+Plug 'HerringtonDarkholme/yats.vim'
 
-Plug 'leafgarland/typescript-vim'
+Plug '/Users/mhlz/proj/darcooler'
 call plug#end()
+
+let g:yats_host_keyword = 0
+let g:yajs_host_keyword = 0
 
 " let g:deoplete#enable_at_startup = 1
 "" Completion stuff
@@ -53,6 +59,7 @@ set tabstop=4
 set shiftwidth=4
 set autoread
 set mouse=a
+set noshowmode
 
 set expandtab
 au FileType go set noexpandtab
@@ -76,9 +83,7 @@ syntax enable
 " let g:oceanic_next_terminal_italic = 1
 " colorscheme OceanicNext
 " colorscheme synthwave84
-colorscheme darcula
-hi CursorLineNr guifg=grey
-hi SignColumn guibg=black
+colorscheme darcooler
 
 function! AgFzf(query, fullscreen)
   let command_fmt = 'ag -C 0 --nobreak --nogroup --column --line-number --noheading --smart-case %s || true'
@@ -111,6 +116,9 @@ nnoremap <C-n> :NERDTreeToggle<CR>
 
 nnoremap <silent> <expr> <C-p> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Ag\<cr>"
 nnoremap <silent> <expr> <C-f> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":FZF\<cr>"
+
+nnoremap 0 ^
+nnoremap ^ 0
 
 filetype on
 
@@ -283,4 +291,13 @@ nnoremap <leader>yy "*yy
 nnoremap <leader>p "*p
 vnoremap <leader>p "*p
 vnoremap <leader>x "*d
+
+
+" Color scheme development
+function! SynGroup()                                                            
+    let l:s = synID(line('.'), col('.'), 1)                                       
+    echo synIDattr(l:s, 'name') . ' -> ' . synIDattr(synIDtrans(l:s), 'name')
+endfun
+
+nnoremap <leader>hl :call SynGroup()<CR>
 
