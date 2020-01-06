@@ -22,3 +22,8 @@ set -gx LC_MONETARY de_DE.UTF-8
 # tabtab source for slss package
 # uninstall by removing these lines or running `tabtab uninstall slss`
 [ -f /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/slss.fish ]; and . /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/slss.fish
+
+direnv hook fish | source
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/mhlz/homefully/sandbox/google-cloud-sdk/path.fish.inc' ]; . '/Users/mhlz/homefully/sandbox/google-cloud-sdk/path.fish.inc'; end
