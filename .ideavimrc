@@ -1,0 +1,13 @@
+set nu
+set rnu
+set scrolloff=15
+set smartcase
+set wrapscan
+set surround
+
+
+
+nnoremap ; :
+nnoremap : <nop>
+nnoremap <C-n> :action ActivateProjectToolWindow<CR>
+
