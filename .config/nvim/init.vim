@@ -33,8 +33,8 @@ Plug 'scrooloose/nerdtree'
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 
-Plug 'othree/yajs.vim'
-Plug 'othree/es.next.syntax.vim'
+" Plug 'othree/yajs.vim'
+" Plug 'othree/es.next.syntax.vim'
 Plug 'HerringtonDarkholme/yats.vim'
 
 Plug '/Users/mhlz/proj/darcooler'
@@ -187,6 +187,9 @@ endfunction
 " Highlight symbol under cursor on CursorHold
 autocmd CursorMoved * silent call CocActionAsync('highlight')
 autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Use TS highlighting for JS files
+autocmd BufNewFile,BufRead *.js set syntax=typescript
 
 " Remap for rename current word
 nmap <leader>rn <Plug>(coc-rename)
