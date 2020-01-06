@@ -1,7 +1,7 @@
 [user]
 	name = Mischa Holz
 	email = me@mhlz.de
-	signingkey = 5BD220A328CE4C343487C6711E504BB4A0C7E348
+	signingkey = 416A4144B1A04249
 [push]
 	followTags = true
 [alias]
