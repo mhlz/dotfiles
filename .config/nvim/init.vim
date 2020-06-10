@@ -1,7 +1,7 @@
 call plug#begin('~/.vim/plugged')
 Plug 'itchyny/lightline.vim'
 
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
 
 "A dependency of 'ncm2'.
 "Plug 'roxma/nvim-yarp'
@@ -39,7 +39,12 @@ Plug 'HerringtonDarkholme/yats.vim'
 
 " Plug '/Users/mhlz/proj/darcooler'
 Plug '/home/mhlz/proj/darcooler-vim'
+
+" Plug 'takac/vim-hardtime'
 call plug#end()
+
+let g:hardtime_default_on = 1
+let g:hardtime_ignore_buffer_patterns = [ "NERD.*" ]
 
 let g:yats_host_keyword = 0
 let g:yajs_host_keyword = 0
@@ -215,6 +220,8 @@ nmap <leader>ac  <Plug>(coc-codeaction)
 " Fix autofix problem of current line
 nmap <leader>qf  <Plug>(coc-fix-current)
 
+nmap af <Plug>(coc-funcobj-a)
+
 " Use `:Format` to format current buffer
 command! -nargs=0 Format :execute "normal \<Plug>(coc-format)"
 
@@ -233,6 +240,14 @@ endfunction
 " Use `:Fold` to fold current buffer
 command! -nargs=? Fold :call CocAction('fold', <f-args>)
 
+function! LightlineFilename()
+    let root = fnamemodify(get(b:, 'git_dir'), ':h')
+    let path = expand('%:p')
+    if path[:len(root)-1] ==# root
+        return path[len(root)+1:]
+    endif
+    return expand('%')
+ endfunction
 
 " Add diagnostic info for https://github.com/itchyny/lightline.vim
 let g:lightline = {
@@ -244,6 +259,7 @@ let g:lightline = {
       \ },
       \ 'component_function': {
       \   'fugitive': 'LightlineFugitive',
+      \   'filename': 'LightlineFilename',
       \   'cocstatus': 'coc#status'
       \ },
       \ }
@@ -306,3 +322,18 @@ endfun
 nnoremap <leader>hl :call SynGroup()<CR>
 
 nnoremap <Esc> :nohl<CR>
+
+syntax sync minlines=10000
+
+" Map function and class text objects
+" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
+xmap if <Plug>(coc-funcobj-i)
+omap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap af <Plug>(coc-funcobj-a)
+xmap ic <Plug>(coc-classobj-i)
+omap ic <Plug>(coc-classobj-i)
+xmap ac <Plug>(coc-classobj-a)
+omap ac <Plug>(coc-classobj-a)
+
+command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
