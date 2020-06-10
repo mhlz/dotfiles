@@ -37,7 +37,8 @@ Plug 'junegunn/fzf.vim'
 " Plug 'othree/es.next.syntax.vim'
 Plug 'HerringtonDarkholme/yats.vim'
 
-Plug '/Users/mhlz/proj/darcooler'
+" Plug '/Users/mhlz/proj/darcooler'
+Plug '/home/mhlz/proj/darcooler-vim'
 call plug#end()
 
 let g:yats_host_keyword = 0
@@ -195,8 +196,8 @@ autocmd BufNewFile,BufRead *.js set syntax=typescript
 nmap <leader>rn <Plug>(coc-rename)
 
 " Remap for format selected region
-xmap <leader>f  <Plug>(coc-format-selected)
-nmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format)
+xmap <leader>f  <Plug>(coc-format)
 
 augroup mygroup
   autocmd!
@@ -215,7 +216,7 @@ nmap <leader>ac  <Plug>(coc-codeaction)
 nmap <leader>qf  <Plug>(coc-fix-current)
 
 " Use `:Format` to format current buffer
-command! -nargs=0 Format :call Format()
+command! -nargs=0 Format :execute "normal \<Plug>(coc-format)"
 
 function! Format() abort
 	let eslintTypes = [ "javascript", "typescript", "json" ]
@@ -288,12 +289,12 @@ nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list
 nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 
-vnoremap <leader>c "*y
-vnoremap <leader>y "*y
-nnoremap <leader>yy "*yy
-nnoremap <leader>p "*p
-vnoremap <leader>p "*p
-vnoremap <leader>x "*d
+vnoremap <leader>c "+y
+vnoremap <leader>y "+y
+nnoremap <leader>yy "+yy
+nnoremap <leader>p "+p
+vnoremap <leader>p "+p
+vnoremap <leader>x "+d
 
 
 " Color scheme development
@@ -304,3 +305,4 @@ endfun
 
 nnoremap <leader>hl :call SynGroup()<CR>
 
+nnoremap <Esc> :nohl<CR>
