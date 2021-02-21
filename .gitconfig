@@ -1,7 +1,7 @@
 [user]
 	name = Mischa Holz
 	email = me@mhlz.de
-	signingkey = 416A4144B1A04249
+	signingkey = FF4CA759765F17BA
 [push]
 	followTags = true
 [alias]
@@ -12,3 +12,7 @@
 	insteadOf = https://gitlab.com/
 [commit]
 	gpgsign = true
+[pull]
+	rebase = false
+[init]
+	defaultBranch = main

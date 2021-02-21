@@ -1,6 +1,4 @@
 {
-    "tsserver.npm": "/usr/local/bin/npm",
-    "tsserver.tsdk": "/usr/local/lib/node_modules/typescript/lib/",
     "signature.enable": true,
     "signature.target": "float",
     "signature.triggerSignatureWait": 50,

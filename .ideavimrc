@@ -7,7 +7,5 @@ set surround
 
 
 
-nnoremap ; :
-nnoremap : <nop>
 nnoremap <C-n> :action ActivateProjectToolWindow<CR>
 

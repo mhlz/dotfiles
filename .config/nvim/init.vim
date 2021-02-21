@@ -30,15 +30,18 @@ Plug 'tpope/vim-surround'
 
 Plug 'scrooloose/nerdtree'
 
-Plug '/usr/local/opt/fzf'
+Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 
 " Plug 'othree/yajs.vim'
 " Plug 'othree/es.next.syntax.vim'
 Plug 'HerringtonDarkholme/yats.vim'
+" Plug 'leafgarland/typescript-vim'
 
 " Plug '/Users/mhlz/proj/darcooler'
 Plug '/home/mhlz/proj/darcooler-vim'
+
+" Plug 'liuchengxu/vista.vim'
 
 " Plug 'takac/vim-hardtime'
 call plug#end()
@@ -102,8 +105,6 @@ endfunction
 command! -nargs=* -bang Ag call AgFzf(<q-args>, <bang>0)
 
 " Keymaps
-nnoremap ; :
-nnoremap : <nop>
 vmap < <gv
 vmap > >gv
 nnoremap <leader>d "_d
@@ -122,9 +123,6 @@ nnoremap <C-n> :NERDTreeToggle<CR>
 
 nnoremap <silent> <expr> <C-p> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Ag\<cr>"
 nnoremap <silent> <expr> <C-f> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":FZF\<cr>"
-
-nnoremap 0 ^
-nnoremap ^ 0
 
 filetype on
 
@@ -180,7 +178,7 @@ nmap <silent> gr <Plug>(coc-references)
 " Use K to show documentation in preview window
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 
-nnoremap ff :CocAction<CR>
+nmap ff <Plug>(coc-codeaction)
 
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
@@ -219,8 +217,6 @@ nmap <leader>a  <Plug>(coc-codeaction-selected)
 nmap <leader>ac  <Plug>(coc-codeaction)
 " Fix autofix problem of current line
 nmap <leader>qf  <Plug>(coc-fix-current)
-
-nmap af <Plug>(coc-funcobj-a)
 
 " Use `:Format` to format current buffer
 command! -nargs=0 Format :execute "normal \<Plug>(coc-format)"
@@ -312,6 +308,11 @@ nnoremap <leader>p "+p
 vnoremap <leader>p "+p
 vnoremap <leader>x "+d
 
+if has("autocmd")
+  augroup templates
+    autocmd BufNewFile *.sh 0r ~/.vim/templates/skeleton.sh
+  augroup END
+endif
 
 " Color scheme development
 function! SynGroup()                                                            
