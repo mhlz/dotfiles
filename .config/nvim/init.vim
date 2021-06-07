@@ -1,67 +1,193 @@
 call plug#begin('~/.vim/plugged')
 Plug 'itchyny/lightline.vim'
 
-Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
+Plug 'christianchiarulli/nvcode-color-schemes.vim'
 
-"A dependency of 'ncm2'.
-"Plug 'roxma/nvim-yarp'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'nvim-treesitter/playground'
 
-"v2 of the nvim-completion-manager.
-"Plug 'ncm2/ncm2'
-
-Plug 'tpope/vim-fugitive'
-
-" LanguageServer client for NeoVim.
-"Plug 'autozimu/LanguageClient-neovim', {
-"  \ 'branch': 'next',
-"  \ 'do': 'bash install.sh',
-"  \ }
-
+Plug 'neovim/nvim-lspconfig'
+Plug 'mbbill/undotree'
 Plug 'editorconfig/editorconfig-vim'
-
-Plug 'udalov/kotlin-vim'
-
-Plug 'tpope/vim-surround'
-
-" Plug 'mhartington/oceanic-next'
-" Plug 'artanikin/vim-synthwave84'
-" Plug 'isobit/vim-darcula-colors'
-" Plug 'jcorbin/darkula'
-
 Plug 'scrooloose/nerdtree'
 
-Plug 'junegunn/fzf'
-Plug 'junegunn/fzf.vim'
+Plug 'hrsh7th/nvim-compe'
 
-" Plug 'othree/yajs.vim'
-" Plug 'othree/es.next.syntax.vim'
-Plug 'HerringtonDarkholme/yats.vim'
-" Plug 'leafgarland/typescript-vim'
+Plug 'mhartington/formatter.nvim'
 
-" Plug '/Users/mhlz/proj/darcooler'
-Plug '/home/mhlz/proj/darcooler-vim'
+" dependencies
+Plug 'nvim-lua/popup.nvim'
+Plug 'nvim-lua/plenary.nvim'
+" telescope
+Plug 'nvim-telescope/telescope.nvim'
 
-" Plug 'liuchengxu/vista.vim'
-
-" Plug 'takac/vim-hardtime'
 call plug#end()
 
-let g:hardtime_default_on = 1
-let g:hardtime_ignore_buffer_patterns = [ "NERD.*" ]
+lua << EOF
+local nvim_lsp = require('lspconfig')
+local util = nvim_lsp.util
 
-let g:yats_host_keyword = 0
-let g:yajs_host_keyword = 0
+local eslint = {
+  lintCommand = "eslint_d -f unix --stdin --stdin-filename ${INPUT}",
+  lintStdin = true,
+  lintFormats = {"%f:%l:%c: %m"},
+  lintIgnoreExitCode = true,
+  formatCommand = "eslint_d --fix-to-stdout --stdin --stdin-filename=${INPUT}",
+  formatStdin = true
+}
 
-" let g:deoplete#enable_at_startup = 1
-"" Completion stuff
-"autocmd BufEnter  *  call ncm2#enable_for_buffer()
-set completeopt=noinsert,menuone
-"
-"let g:LanguageClient_serverCommands = {
-"  \ 'typescript': ['typescript-language-server', '--stdio']
-"  \ }
-"
-" Required for operations modifying multiple buffers like rename.
+require "lspconfig".efm.setup {
+  init_options = {documentFormatting = true},
+  filetypes = {"javascript", "typescript"},
+  root_dir = function(fname)
+    return util.root_pattern("tsconfig.json")(fname) or
+    util.root_pattern(".eslintrc.js", ".git")(fname);
+  end,
+  settings = {
+    rootMarkers = {".eslintrc.js", ".git/"},
+    languages = {
+      javascript = {eslint},
+      typescript = {eslint}
+    }
+  }
+}
+
+require("formatter").setup(
+  {
+    logging = true,
+    filetype = {
+      typescriptreact = {
+        -- prettier
+        function()
+          return {
+            exe = "prettier",
+            args = {"--stdin-filepath", vim.api.nvim_buf_get_name(0)},
+            stdin = true
+          }
+        end
+      },
+      typescript = {
+        -- prettier
+        function()
+          return {
+            exe = "prettier",
+            args = {"--stdin-filepath", vim.api.nvim_buf_get_name(0)},
+            stdin = true
+          }
+        end
+      },
+      javascript = {
+        -- prettier
+        function()
+          return {
+            exe = "prettier",
+            args = {"--stdin-filepath", vim.api.nvim_buf_get_name(0)},
+            stdin = true
+          }
+        end
+      },
+      javascriptreact = {
+        -- prettier
+        function()
+          return {
+            exe = "prettier",
+            args = {"--stdin-filepath", vim.api.nvim_buf_get_name(0)},
+            stdin = true
+          }
+        end
+      },
+      json = {
+        -- prettier
+        function()
+          return {
+            exe = "prettier",
+            args = {"--stdin-filepath", vim.api.nvim_buf_get_name(0)},
+            stdin = true
+          }
+        end
+      },
+      lua = {
+        -- luafmt
+        function()
+          return {
+            exe = "luafmt",
+            args = {"--indent-count", 2, "--stdin"},
+            stdin = true
+          }
+        end
+      }
+    }
+  }
+)
+
+-- Use an on_attach function to only map the following keys 
+-- after the language server attaches to the current buffer
+local on_attach = function(client, bufnr)
+  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+  local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+
+  --Enable completion triggered by <c-x><c-o>
+  buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+  -- Mappings.
+  local opts = { noremap=true, silent=true }
+
+  -- See `:help vim.lsp.*` for documentation on any of the below functions
+  buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+  buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  buf_set_keymap("i", "<C-y>", "<cmd>lua vim.lsp.buf.hover()<CR>", { silent = true })
+  buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+  buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+  buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+  buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+  buf_set_keymap('n', '<leader>d', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+  buf_set_keymap('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  buf_set_keymap('n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+  buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+  buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+  buf_set_keymap('n', '<C-E>', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
+  buf_set_keymap('n', '<C-e>', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+  buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+
+end
+
+-- Use a loop to conveniently call 'setup' on multiple servers and
+-- map buffer local keybindings when the language server attaches
+local servers = { "tsserver", "diagnosticls" }
+for _, lsp in ipairs(servers) do
+  nvim_lsp[lsp].setup { on_attach = on_attach }
+end
+
+vim.api.nvim_set_keymap('i', '<leader>f', '<cmd>Format<CR>', {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>f', '<cmd>Format<CR>', {noremap = true})
+vim.api.nvim_set_keymap('i', '<leader>o', '<cmd>lua organizeImports()<CR>', {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>o', '<cmd>lua organizeImports()<CR>', {noremap = true})
+
+function organizeImports()
+  local params = vim.lsp.util.make_range_params()
+  params.context = {diagnostics = {}, only = {'source.organizeImports'}}
+
+  local responses = vim.lsp.buf_request_sync(0, 'textDocument/codeAction', params)
+
+  if not responses or vim.tbl_isempty(responses) then
+    return
+  end
+
+  for _, response in pairs(responses) do
+    for _, result in pairs(response.result or {}) do
+      if result.edit then
+        vim.lsp.util.apply_workspace_edit(result.edit)
+      else
+        vim.lsp.buf.execute_command(result.command)
+      end
+    end
+  end
+end
+
+EOF
+
 set hidden
 set signcolumn=yes
 set tabstop=4
@@ -69,6 +195,9 @@ set shiftwidth=4
 set autoread
 set mouse=a
 set noshowmode
+
+set undodir=~/.vim/undofiles5
+set undofile
 
 set expandtab
 au FileType go set noexpandtab
@@ -86,29 +215,11 @@ set ignorecase
 set smartcase
 set autoread
 
-" Theme
-syntax enable
-" let g:oceanic_next_terminal_bold = 1
-" let g:oceanic_next_terminal_italic = 1
-" colorscheme OceanicNext
-" colorscheme synthwave84
-colorscheme darcooler
+" Key Mappings/keymappings
+"
 
-function! AgFzf(query, fullscreen)
-  let command_fmt = 'ag -C 0 --nobreak --nogroup --column --line-number --noheading --smart-case %s || true'
-  let initial_command = printf(command_fmt, shellescape(a:query))
-  let reload_command = printf(command_fmt, '{q}')
-  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
-  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
-endfunction
-
-command! -nargs=* -bang Ag call AgFzf(<q-args>, <bang>0)
-
-" Keymaps
 vmap < <gv
 vmap > >gv
-nnoremap <leader>d "_d
-vnoremap <leader>d "_d
 
 vnoremap gy "*y
 
@@ -119,10 +230,15 @@ nnoremap <C-K> <C-W>k
 nnoremap <C-L> <C-W>l
 nnoremap <C-H> <C-W>h
 
-nnoremap <C-n> :NERDTreeToggle<CR>
+vnoremap <leader>c "+y
+vnoremap <leader>y "+y
+nnoremap <leader>yy "+yy
+nnoremap <leader>p "+p
+vnoremap <leader>p "+p
+vnoremap <leader>x "+d
+nnoremap <silent> <Esc> :nohl<CR>
 
-nnoremap <silent> <expr> <C-p> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Ag\<cr>"
-nnoremap <silent> <expr> <C-f> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":FZF\<cr>"
+nnoremap <C-n> :NERDTreeToggle<CR>
 
 filetype on
 
@@ -145,97 +261,41 @@ set shortmess+=c
 " always show signcolumns
 set signcolumn=yes
 
-" Use tab for trigger completion with characters ahead and navigate.
-" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+" Completion
+set completeopt=menuone,noselect
+let g:compe = {}
+let g:compe.source = {}
+let g:compe.source.path = v:true
+let g:compe.source.buffer = v:true
+let g:compe.source.calc = v:true
+let g:compe.source.nvim_lsp = v:true
+let g:compe.source.nvim_lua = v:true
+let g:compe.source.vsnip = v:true
+let g:compe.source.ultisnips = v:true
 
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
+inoremap <silent><expr> <CR>      compe#confirm('<CR>')
 
-" Use <c-space> to trigger completion.
-inoremap <silent><expr> <c-space> coc#refresh()
 
-" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
-" Coc only does snippet and additional edit on confirm.
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+" Finding things
+nnoremap <C-f> <cmd>Telescope find_files<cr>
+nnoremap <C-p> <cmd>Telescope live_grep<cr>
 
-" Use `[c` and `]c` to navigate diagnostics
-nmap <silent> [c <Plug>(coc-diagnostic-prev)
-nmap <C-e> <Plug>(coc-diagnostic-next)
 
-" Remap keys for gotos
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+" Colors
+" configure nvcode-color-schemes
+let g:nvcode_termcolors=256
 
-" Use K to show documentation in preview window
-nnoremap <silent> K :call <SID>show_documentation()<CR>
+syntax on
+colorscheme nvcode " Or whatever colorscheme you make
 
-nmap ff <Plug>(coc-codeaction)
 
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
+" checks if your terminal has 24-bit color support
+if (has("termguicolors"))
+    set termguicolors
+    hi LineNr ctermbg=NONE guibg=NONE
+endif
 
-" Highlight symbol under cursor on CursorHold
-autocmd CursorMoved * silent call CocActionAsync('highlight')
-autocmd CursorHold * silent call CocActionAsync('highlight')
-
-" Use TS highlighting for JS files
-autocmd BufNewFile,BufRead *.js set syntax=typescript
-
-" Remap for rename current word
-nmap <leader>rn <Plug>(coc-rename)
-
-" Remap for format selected region
-nmap <leader>f  <Plug>(coc-format)
-xmap <leader>f  <Plug>(coc-format)
-
-augroup mygroup
-  autocmd!
-  " Setup formatexpr specified filetype(s).
-  " Update signature help on jump placeholder
-  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-augroup end
-
-" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
-xmap <leader>a  <Plug>(coc-codeaction-selected)
-nmap <leader>a  <Plug>(coc-codeaction-selected)
-
-" Remap for do codeAction of current line
-nmap <leader>ac  <Plug>(coc-codeaction)
-" Fix autofix problem of current line
-nmap <leader>qf  <Plug>(coc-fix-current)
-
-" Use `:Format` to format current buffer
-command! -nargs=0 Format :execute "normal \<Plug>(coc-format)"
-
-function! Format() abort
-	let eslintTypes = [ "javascript", "typescript", "json" ]
-	let idx = index(eslintTypes, &ft)
-    if &ft == "javascript"
-		:CocCommand eslint.executeAutofix
-    elseif &ft == "typescript"
-        :CocCommand tslint.fixAllProblems
-	else
-		:call CocAction('format')
-	endif
-endfunction
-
-" Use `:Fold` to fold current buffer
-command! -nargs=? Fold :call CocAction('fold', <f-args>)
-
+" Lightline
 function! LightlineFilename()
     let root = fnamemodify(get(b:, 'git_dir'), ':h')
     let path = expand('%:p')
@@ -247,7 +307,6 @@ function! LightlineFilename()
 
 " Add diagnostic info for https://github.com/itchyny/lightline.vim
 let g:lightline = {
-      \ 'colorscheme': 'darcula',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
       \             [ 'cocstatus', 'readonly', 'filename', 'modified' ] ],
@@ -281,60 +340,3 @@ function! LightlineFugitive() abort
   return ''
 endfunction
 
-
-
-" Using CocList
-" Show all diagnostics
-nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
-" Manage extensions
-nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
-" Show commands
-nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
-" Find symbol of current document
-nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
-" Search workspace symbols
-nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
-" Do default action for next item.
-nnoremap <silent> <space>j  :<C-u>CocNext<CR>
-" Do default action for previous item.
-nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
-" Resume latest coc list
-nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
-
-vnoremap <leader>c "+y
-vnoremap <leader>y "+y
-nnoremap <leader>yy "+yy
-nnoremap <leader>p "+p
-vnoremap <leader>p "+p
-vnoremap <leader>x "+d
-
-if has("autocmd")
-  augroup templates
-    autocmd BufNewFile *.sh 0r ~/.vim/templates/skeleton.sh
-  augroup END
-endif
-
-" Color scheme development
-function! SynGroup()                                                            
-    let l:s = synID(line('.'), col('.'), 1)                                       
-    echo synIDattr(l:s, 'name') . ' -> ' . synIDattr(synIDtrans(l:s), 'name')
-endfun
-
-nnoremap <leader>hl :call SynGroup()<CR>
-
-nnoremap <Esc> :nohl<CR>
-
-syntax sync minlines=10000
-
-" Map function and class text objects
-" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
-xmap if <Plug>(coc-funcobj-i)
-omap if <Plug>(coc-funcobj-i)
-xmap af <Plug>(coc-funcobj-a)
-omap af <Plug>(coc-funcobj-a)
-xmap ic <Plug>(coc-classobj-i)
-omap ic <Plug>(coc-classobj-i)
-xmap ac <Plug>(coc-classobj-a)
-omap ac <Plug>(coc-classobj-a)
-
-command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
