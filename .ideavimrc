@@ -5,7 +5,9 @@ set smartcase
 set wrapscan
 set surround
 
-
+imap <C-v> <ESC>:action $Paste<CR>i
 
 nnoremap <C-n> :action ActivateProjectToolWindow<CR>
 
+nmap <leader>f  :action ReformatCode<CR>
+xmap <leader>f  :action ReformatCode<CR>
