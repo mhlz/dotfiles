@@ -21,6 +21,7 @@ Plug 'nvim-lua/plenary.nvim'
 " telescope
 Plug 'nvim-telescope/telescope.nvim'
 
+Plug 'tpope/vim-surround'
 call plug#end()
 
 lua << EOF
