@@ -16,11 +16,11 @@ function __chain_prompt_segment
 end
 
 function __chain_git_branch_name
-  echo (command git symbolic-ref HEAD ^/dev/null | sed -e 's|^refs/heads/||')
+  echo (command git branch --show-current 2>/dev/null)
 end
 
 function __chain_is_git_dirty
-  echo (command git status -s --ignore-submodules=dirty ^/dev/null)
+  echo (command git status -s --ignore-submodules=dirty)
 end
 
 function __chain_prompt_root

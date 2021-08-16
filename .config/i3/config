@@ -13,6 +13,7 @@ exec xrandr --output DisplayPort-2 --left-of DisplayPort-0
 exec_always xset r rate 150 66
 exec_always setxkbmap -option compose:ralt
 exec_always xinput set-prop "pointer:Logitech G502" 295 1
+exec_always xinput set-prop "pointer:Logitech G502 LIGHTSPEED Wireless Gaming Mouse" 295 1
 exec_always feh --bg-scale /home/mhlz/fuji.png
 exec_always ~/.config/i3/polybar.sh
 exec_always --no-startup-id killall picom; picom -b --experimental-backends
