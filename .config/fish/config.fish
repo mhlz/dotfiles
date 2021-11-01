@@ -1,6 +1,7 @@
 [ -f /usr/local/share/autojump/autojump.fish ]; and source /usr/local/share/autojump/autojump.fish
 [ -f /usr/share/autojump/autojump.fish ]; and source /usr/share/autojump/autojump.fish
 set -g fish_user_paths "/home/mhlz/.local/bin" "/home/mhlz/go/bin" "/usr/local/sbin" "/opt/anaconda/bin" "/home/mhlz/.cargo/bin" $fish_user_paths
+fish_add_path /opt/homebrew/bin/
 
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
 

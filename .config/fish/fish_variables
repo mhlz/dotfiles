@@ -1,7 +1,5 @@
 # This file contains fish universal variable definitions.
 # VERSION: 3.0
-# This file contains fish universal variable definitions.
-# VERSION: 3.0
 SETUVAR __fish_init_2_39_8:\x1d
 SETUVAR __fish_init_2_3_0:\x1d
 SETUVAR __fish_init_3_x:\x1d
@@ -35,4 +33,4 @@ SETUVAR fish_pager_color_completion:normal
 SETUVAR fish_pager_color_description:B3A06D\x1eyellow
 SETUVAR fish_pager_color_prefix:white\x1e\x2d\x2dbold\x1e\x2d\x2dunderline
 SETUVAR fish_pager_color_progress:brwhite\x1e\x2d\x2dbackground\x3dcyan
-SETUVAR fish_user_paths:/usr/local/sbin\x1e/usr/local/sbin\x1e/usr/local/opt/fzf/bin\x1e/Users/mhlz/\x2eyarn/bin
+SETUVAR fish_user_paths:/opt/homebrew/bin\x1e/home/mhlz/\x2elocal/bin\x1e/home/mhlz/go/bin\x1e/usr/local/sbin\x1e/opt/anaconda/bin\x1e/home/mhlz/\x2ecargo/bin\x1e/usr/local/sbin\x1e/usr/local/sbin\x1e/usr/local/opt/fzf/bin\x1e/Users/mhlz/\x2eyarn/bin\x1e/opt/homebrew/opt/fzf/bin
