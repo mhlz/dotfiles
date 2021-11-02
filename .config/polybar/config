@@ -36,11 +36,11 @@ fixed-center = true
 background = ${colors.background}
 foreground = ${colors.foreground}
 
-font-0 = SF Pro Display:size=20;5
-font-1 = Font Awesome 5 Free:pixelsize=20;8
-font-2 = Font Awesome 5 Free Solid:pixelsize=20;8
-font-3 = Font Awesome 5 Brands:pixelsize=20;5
-font-4 = Emoji:size=20
+font-0 = SF Pro Display:size=24;5
+font-1 = Font Awesome 5 Free:pixelsize=24;8
+font-2 = Font Awesome 5 Free Solid:pixelsize=24;8
+font-3 = Font Awesome 5 Brands:pixelsize=24;5
+font-4 = Emoji:size=24
 
 modules-left = powermenu title
 modules-center = i3
@@ -54,6 +54,7 @@ cursor-scroll = ns-resize
 
 [module/title]
 type = internal/xwindow
+label-maxlen = 100
 
 [module/i3]
 type = internal/i3
@@ -132,11 +133,11 @@ click-right = exec pavucontrol
 [module/temperature]
 type = internal/temperature
 
-hwmon-path = "/sys/bus/platform/devices/nct6775.2592/hwmon/hwmon5/temp1_input"
+hwmon-path = "/sys/bus/hid/drivers/corsair-cpro/0003:1B1C:0C10.0008/hwmon/hwmon3/temp1_input"
 
 format = <label>
 
-label = CPU: %temperature-c%
+label = Water: %temperature-c%
 
 [module/powermenu]
 type = custom/menu

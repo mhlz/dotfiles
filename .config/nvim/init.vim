@@ -1,6 +1,8 @@
 call plug#begin('~/.vim/plugged')
 Plug 'itchyny/lightline.vim'
 
+Plug 'lbrayner/vim-rzip'
+
 Plug 'christianchiarulli/nvcode-color-schemes.vim'
 
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
@@ -22,9 +24,19 @@ Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 
 Plug 'tpope/vim-surround'
+
+Plug 'p00f/nvim-ts-rainbow'
 call plug#end()
 
 lua << EOF
+require'nvim-treesitter.configs'.setup {
+  rainbow = {
+    enable = true,
+    extended_mode = true, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
+    max_file_lines = nil, -- Do not enable for files with more than n lines, int
+  }
+}
+
 local nvim_lsp = require('lspconfig')
 local util = nvim_lsp.util
 
@@ -97,6 +109,26 @@ require("formatter").setup(
           }
         end
       },
+      yaml = {
+        -- prettier
+        function()
+          return {
+            exe = "prettier",
+            args = {"--stdin-filepath", vim.api.nvim_buf_get_name(0)},
+            stdin = true
+          }
+        end
+      },
+      graphql = {
+        -- prettier
+        function()
+          return {
+            exe = "prettier",
+            args = {"--stdin-filepath", vim.api.nvim_buf_get_name(0)},
+            stdin = true
+          }
+        end
+      },
       json = {
         -- prettier
         function()
@@ -146,6 +178,7 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', '<leader>d', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
   buf_set_keymap('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
   buf_set_keymap('n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+  buf_set_keymap('n', 'ff', '<cmd>lua vim.lsp.buf.code_action({only="quickfix"})<CR>', opts)
   buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
   buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
   buf_set_keymap('n', '<C-E>', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
@@ -156,7 +189,7 @@ end
 
 -- Use a loop to conveniently call 'setup' on multiple servers and
 -- map buffer local keybindings when the language server attaches
-local servers = { "tsserver", "diagnosticls", "rust_analyzer" }
+local servers = { "tsserver", "diagnosticls", "rust_analyzer", "terraformls" }
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup { on_attach = on_attach }
 end
@@ -187,7 +220,44 @@ function organizeImports()
   end
 end
 
+require'nvim-treesitter.configs'.setup {
+  highlight = {
+    enable = true,
+  }
+}
+
 EOF
+
+" Decode URI encoded characters
+function! DecodeURI(uri)
+    return substitute(a:uri, '%\([a-fA-F0-9][a-fA-F0-9]\)', '\=nr2char("0x" . submatch(1))', "g")
+endfunction
+" Attempt to clear non-focused buffers with matching name
+function! ClearDuplicateBuffers(uri)
+    " if our filename has URI encoded characters
+    if DecodeURI(a:uri) !=# a:uri
+        " wipeout buffer with URI decoded name - can print error if buffer in focus
+        sil! exe "bwipeout " . fnameescape(DecodeURI(a:uri))
+        " change the name of the current buffer to the URI decoded name
+        exe "keepalt file " . fnameescape(DecodeURI(a:uri))
+        " ensure we don't have any open buffer matching non-URI decoded name
+        sil! exe "bwipeout " . fnameescape(a:uri)
+    endif
+endfunction
+function! RzipOverride()
+    " Disable vim-rzip's autocommands
+    autocmd! zip BufReadCmd   zipfile:*,zipfile:*/*
+    exe "au! zip BufReadCmd ".g:zipPlugin_ext
+    " order is important here, setup name of new buffer correctly then fallback to vim-rzip's handling
+    autocmd zip BufReadCmd   zipfile:*  call ClearDuplicateBuffers(expand("<amatch>"))
+    autocmd zip BufReadCmd   zipfile:*  call rzip#Read(DecodeURI(expand("<amatch>")), 1)
+    if has("unix")
+        autocmd zip BufReadCmd   zipfile:*/*  call ClearDuplicateBuffers(expand("<amatch>"))
+        autocmd zip BufReadCmd   zipfile:*/*  call rzip#Read(DecodeURI(expand("<amatch>")), 1)
+    endif
+    exe "au zip BufReadCmd ".g:zipPlugin_ext."  call rzip#Browse(DecodeURI(expand('<amatch>')))"
+endfunction
+autocmd VimEnter * call RzipOverride()
 
 set hidden
 set signcolumn=yes

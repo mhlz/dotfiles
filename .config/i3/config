@@ -232,8 +232,8 @@ title_align center
 exec --no-startup-id dunst
 exec --no-startup-id pasystray
 exec --no-startup-id blueman-applet
+
 exec --no-startup-id discord
 exec --no-startup-id telegram-desktop
-exec --no-startup-id env GDK_SCALE=1 slack
 
 exec --no-startup-id "i3-msg 'workspace 4; append_layout /home/mhlz/.i3/workspace-1.json'"
