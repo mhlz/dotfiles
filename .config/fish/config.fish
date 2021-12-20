@@ -1,9 +1,12 @@
+[ -f /opt/homebrew/share/autojump/autojump.fish ]; and source /opt/homebrew/share/autojump/autojump.fish
 [ -f /usr/local/share/autojump/autojump.fish ]; and source /usr/local/share/autojump/autojump.fish
 [ -f /usr/share/autojump/autojump.fish ]; and source /usr/share/autojump/autojump.fish
 set -g fish_user_paths "/home/mhlz/.local/bin" "/home/mhlz/go/bin" "/usr/local/sbin" "/opt/anaconda/bin" "/home/mhlz/.cargo/bin" $fish_user_paths
-fish_add_path /opt/homebrew/bin/
+test -e /opt/homebrew/bin; and fish_add_path /opt/homebrew/bin/
 
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
+
+test -e $HOME/.gnupg/S.gpg-agent.ssh; set -x SSH_AUTH_SOCK $HOME/.gnupg/S.gpg-agent.ssh
 
 set -x GPG_TTY (tty)
 set -gx EDITOR nvim

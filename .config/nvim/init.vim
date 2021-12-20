@@ -41,29 +41,29 @@ local nvim_lsp = require('lspconfig')
 local util = nvim_lsp.util
 
 local eslint = {
-  lintCommand = "eslint_d -f unix --stdin --stdin-filename ${INPUT}",
+  lintCommand = "yarn exec eslint_d -f unix --stdin --stdin-filename ${INPUT}",
   lintStdin = true,
   lintFormats = {"%f:%l:%c: %m"},
   lintIgnoreExitCode = true,
-  formatCommand = "eslint_d --fix-to-stdout --stdin --stdin-filename=${INPUT}",
+  formatCommand = "yarn exec eslint_d --fix-to-stdout --stdin --stdin-filename=${INPUT}",
   formatStdin = true
 }
 
-require "lspconfig".efm.setup {
-  init_options = {documentFormatting = true},
-  filetypes = {"javascript", "typescript"},
-  root_dir = function(fname)
-    return util.root_pattern("tsconfig.json")(fname) or
-    util.root_pattern(".eslintrc.js", ".git")(fname);
-  end,
-  settings = {
-    rootMarkers = {".eslintrc.js", ".git/"},
-    languages = {
-      javascript = {eslint},
-      typescript = {eslint}
-    }
-  }
-}
+-- require "lspconfig".efm.setup {
+--   init_options = {documentFormatting = true},
+--   filetypes = {"javascript", "typescript"},
+--   root_dir = function(fname)
+--     return util.root_pattern("tsconfig.json")(fname) or
+--     util.root_pattern(".eslintrc.js", ".git")(fname);
+--   end,
+--   settings = {
+--     rootMarkers = {".eslintrc.js", ".git/"},
+--     languages = {
+--       javascript = {eslint},
+--       typescript = {eslint}
+--     }
+--   }
+-- }
 
 require("formatter").setup(
   {
@@ -200,24 +200,12 @@ vim.api.nvim_set_keymap('i', '<leader>o', '<cmd>lua organizeImports()<CR>', {nor
 vim.api.nvim_set_keymap('n', '<leader>o', '<cmd>lua organizeImports()<CR>', {noremap = true})
 
 function organizeImports()
-  local params = vim.lsp.util.make_range_params()
-  params.context = {diagnostics = {}, only = {'source.organizeImports'}}
-
-  local responses = vim.lsp.buf_request_sync(0, 'textDocument/codeAction', params)
-
-  if not responses or vim.tbl_isempty(responses) then
-    return
-  end
-
-  for _, response in pairs(responses) do
-    for _, result in pairs(response.result or {}) do
-      if result.edit then
-        vim.lsp.util.apply_workspace_edit(result.edit)
-      else
-        vim.lsp.buf.execute_command(result.command)
-      end
-    end
-  end
+  local params = {
+    command = "_typescript.organizeImports",
+    arguments = {vim.api.nvim_buf_get_name(0)},
+    title = ""
+  }
+  vim.lsp.buf.execute_command(params)
 end
 
 require'nvim-treesitter.configs'.setup {
@@ -348,8 +336,37 @@ inoremap <silent><expr> <CR>      compe#confirm('<CR>')
 
 
 " Finding things
-nnoremap <C-f> <cmd>Telescope find_files<cr>
-nnoremap <C-p> <cmd>Telescope live_grep<cr>
+lua << EOF
+require("telescope").setup(
+{
+    defaults = {
+        cache_picker = { num_pickers = 2 }
+    }
+})
+
+local state = require("telescope.state")
+local builtin = require("telescope.builtin")
+
+function open_picker_with_state(t, prompt)
+    local cached_pickers = state.get_global_key "cached_pickers"
+    if cached_pickers == nil or vim.tbl_isempty(cached_pickers) then
+        builtin[t]()
+        return
+    end
+
+    for i,v in ipairs(cached_pickers) do
+        if v.prompt_title == prompt then
+            builtin.resume({cache_index = i })
+            return
+        end
+    end
+
+    builtin[t]()
+end
+
+EOF
+nnoremap <C-p> <cmd>lua open_picker_with_state("live_grep", "Live Grep")<cr>
+nnoremap <C-f> <cmd>lua open_picker_with_state("find_files", "Find Files")<cr>
 
 
 " Colors
