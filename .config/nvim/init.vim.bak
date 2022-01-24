@@ -201,7 +201,7 @@ vim.api.nvim_set_keymap('n', '<leader>o', '<cmd>lua organizeImports()<CR>', {nor
 
 function organizeImports()
   local params = vim.lsp.util.make_range_params()
-  params.context = {diagnostics = {}, only = {'source.organizeImports'}}
+  params.context = {diagnostics = {}, only = {'tsserver.organizeImports'}}
 
   local responses = vim.lsp.buf_request_sync(0, 'textDocument/codeAction', params)
 
@@ -232,6 +232,7 @@ EOF
 function! DecodeURI(uri)
     return substitute(a:uri, '%\([a-fA-F0-9][a-fA-F0-9]\)', '\=nr2char("0x" . submatch(1))', "g")
 endfunction
+
 " Attempt to clear non-focused buffers with matching name
 function! ClearDuplicateBuffers(uri)
     " if our filename has URI encoded characters
@@ -244,19 +245,24 @@ function! ClearDuplicateBuffers(uri)
         sil! exe "bwipeout " . fnameescape(a:uri)
     endif
 endfunction
+
 function! RzipOverride()
     " Disable vim-rzip's autocommands
     autocmd! zip BufReadCmd   zipfile:*,zipfile:*/*
     exe "au! zip BufReadCmd ".g:zipPlugin_ext
+
     " order is important here, setup name of new buffer correctly then fallback to vim-rzip's handling
     autocmd zip BufReadCmd   zipfile:*  call ClearDuplicateBuffers(expand("<amatch>"))
     autocmd zip BufReadCmd   zipfile:*  call rzip#Read(DecodeURI(expand("<amatch>")), 1)
+
     if has("unix")
         autocmd zip BufReadCmd   zipfile:*/*  call ClearDuplicateBuffers(expand("<amatch>"))
         autocmd zip BufReadCmd   zipfile:*/*  call rzip#Read(DecodeURI(expand("<amatch>")), 1)
     endif
+
     exe "au zip BufReadCmd ".g:zipPlugin_ext."  call rzip#Browse(DecodeURI(expand('<amatch>')))"
 endfunction
+
 autocmd VimEnter * call RzipOverride()
 
 set hidden
@@ -365,49 +371,4 @@ if (has("termguicolors"))
     set termguicolors
     hi LineNr ctermbg=NONE guibg=NONE
 endif
-
-" Lightline
-function! LightlineFilename()
-    let root = fnamemodify(get(b:, 'git_dir'), ':h')
-    let path = expand('%:p')
-    if path[:len(root)-1] ==# root
-        return path[len(root)+1:]
-    endif
-    return expand('%')
- endfunction
-
-" Add diagnostic info for https://github.com/itchyny/lightline.vim
-let g:lightline = {
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'cocstatus', 'readonly', 'filename', 'modified' ] ],
-  	  \   'right': [ ['fugitive'], [ 'lineinfo' ], ['percent'], [ 'fileformat', 'fileencoding', 'filetype' ] ]
-      \ },
-      \ 'component_function': {
-      \   'fugitive': 'LightlineFugitive',
-      \   'filename': 'LightlineFilename',
-      \   'cocstatus': 'coc#status'
-      \ },
-      \ }
-
-function! LightlineFugitive() abort
-  if &filetype ==# 'help'
-    return ''
-  endif
-  if has_key(b:, 'lightline_fugitive') && reltimestr(reltime(b:lightline_fugitive_)) =~# '^\s*0\.[0-5]'
-    return b:lightline_fugitive
-  endif
-  try
-    if exists('*fugitive#head')
-      let head = fugitive#head()
-    else
-      return ''
-    endif
-    let b:lightline_fugitive = head
-    let b:lightline_fugitive_ = reltime()
-    return b:lightline_fugitive
-  catch
-  endtry
-  return ''
-endfunction
 
