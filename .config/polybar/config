@@ -44,7 +44,7 @@ font-4 = Emoji:size=24
 
 modules-left = powermenu title
 modules-center = i3
-modules-right = pulseaudio date temperature
+modules-right = mic-mute pulseaudio date
 
 module-margin = 5
 padding = 5
@@ -138,6 +138,11 @@ hwmon-path = "/sys/bus/hid/drivers/corsair-cpro/0003:1B1C:0C10.0008/hwmon/hwmon3
 format = <label>
 
 label = Water: %temperature-c%
+
+[module/mic-mute]
+type = custom/script
+exec = pactl get-source-mute @DEFAULT_SOURCE@
+interval = 1
 
 [module/powermenu]
 type = custom/menu
