@@ -6,8 +6,6 @@ test -e /opt/homebrew/bin; and fish_add_path /opt/homebrew/bin/
 
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
 
-test -e $HOME/.gnupg/S.gpg-agent.ssh; set -x SSH_AUTH_SOCK $HOME/.gnupg/S.gpg-agent.ssh
-
 set -x GPG_TTY (tty)
 set -gx EDITOR nvim
 
