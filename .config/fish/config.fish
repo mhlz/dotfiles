@@ -9,6 +9,8 @@ test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shel
 set -x GPG_TTY (tty)
 set -gx EDITOR nvim
 
+set -gx SSH_AUTH_SOCK (gpgconf --list-dirs agent-ssh-socket)
+
 set -gx LANG en_US.UTF-8
 set -gx LC_NUMERIC de_DE.UTF-8
 set -gx LC_TIME de_DE.UTF-8
