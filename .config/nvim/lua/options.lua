@@ -1,3 +1,5 @@
+vim.opt["completeopt"]="menu,menuone,noselect"
+
 vim.opt["hidden"] = true
 
 vim.opt["signcolumn"] = "yes"
