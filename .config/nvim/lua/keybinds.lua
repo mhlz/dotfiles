@@ -4,6 +4,7 @@ vim.api.nvim_set_keymap('v', 'gy', '"*y', {noremap = true})
 
 vim.api.nvim_set_keymap('v', '<leader>c', '"+y', {noremap = true})
 vim.api.nvim_set_keymap('v', '<leader>y', '"+y', {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>p', '"+p', {noremap = true})
 vim.api.nvim_set_keymap('v', '<leader>p', '"+p', {noremap = true})
 vim.api.nvim_set_keymap('v', '<leader>x', '"+d', {noremap = true})
 

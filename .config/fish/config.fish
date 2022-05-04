@@ -6,10 +6,10 @@ test -e /opt/homebrew/bin; and fish_add_path /opt/homebrew/bin/
 
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
 
-test -e $HOME/.gnupg/S.gpg-agent.ssh; set -x SSH_AUTH_SOCK $HOME/.gnupg/S.gpg-agent.ssh
-
 set -x GPG_TTY (tty)
 set -gx EDITOR nvim
+
+set -gx SSH_AUTH_SOCK (gpgconf --list-dirs agent-ssh-socket)
 
 set -gx LANG en_US.UTF-8
 set -gx LC_NUMERIC de_DE.UTF-8
@@ -35,3 +35,5 @@ if [ -f '/Users/mhlz/homefully/sandbox/google-cloud-sdk/path.fish.inc' ]; . '/Us
 # !! Contents within this block are managed by 'conda init' !!
 # eval /opt/anaconda/bin/conda "shell.fish" "hook" $argv | source
 # <<< conda initialize <<<
+
+starship init fish | source
