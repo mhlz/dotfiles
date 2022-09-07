@@ -3,7 +3,7 @@ vim.opt["completeopt"]="menu,menuone,noselect"
 vim.opt["hidden"] = true
 
 vim.opt["signcolumn"] = "yes"
-vim.opt["tabstop"] = 4
+vim.opt["tabstop"] = 2
 vim.opt["shiftwidth"] = 4
 
 vim.opt["autoread"] = true
