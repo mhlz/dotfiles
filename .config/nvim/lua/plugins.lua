@@ -7,6 +7,8 @@ end
 return require('packer').startup(function(use)
   use "wbthomason/packer.nvim"
 
+  use "ggandor/leap.nvim"
+
   use "nvim-lua/plenary.nvim"
   use "nvim-lua/popup.nvim"
 
