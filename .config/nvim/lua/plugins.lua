@@ -28,6 +28,7 @@ return require('packer').startup(function(use)
   use "hrsh7th/cmp-vsnip"
   use "hrsh7th/vim-vsnip"
 
+  use "tpope/vim-fugitive"
   use "tpope/vim-surround"
 
   use "nvim-telescope/telescope.nvim"
