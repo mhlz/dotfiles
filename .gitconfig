@@ -6,8 +6,6 @@
 	followTags = true
 [alias]
 	tree = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all
-[credential]
-	helper = osxkeychain
 [url "git@gitlab.com:"]
 	insteadOf = https://gitlab.com/
 [commit]
@@ -16,3 +14,5 @@
 	rebase = false
 [init]
 	defaultBranch = main
+[gpg]
+	program = /home/mhlz/.cargo/bin/creekey-git-sign
