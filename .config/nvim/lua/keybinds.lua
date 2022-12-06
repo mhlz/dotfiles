@@ -1,3 +1,5 @@
+require('leap').set_default_keymaps()
+
 vim.api.nvim_set_keymap('v', '<', '<gv', {noremap = true})
 vim.api.nvim_set_keymap('v', '>', '>gv', {noremap = true})
 vim.api.nvim_set_keymap('v', 'gy', '"*y', {noremap = true})

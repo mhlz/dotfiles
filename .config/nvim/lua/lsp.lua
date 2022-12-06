@@ -27,21 +27,17 @@ local on_attach = function(client, bufnr)
     buf_map(bufnr, "n", "gy", ":LspTypeDef<CR>")
     buf_map(bufnr, "n", "<C-E>", ":LspDiagPrev<CR>")
     buf_map(bufnr, "n", "<C-e>", ":LspDiagNext<CR>")
-    buf_map(bufnr, "n", "K", ":LspHover<CR>")
+    buf_map(bufnr, "n", "<C-k>", ":LspHover<CR>")
     buf_map(bufnr, "n", "ff", ":LspCodeAction<CR>")
     buf_map(bufnr, "n", "<Leader>a", ":LspDiagLine<CR>")
     buf_map(bufnr, "n", "<Leader>f", ":LspFormatting<CR>")
     buf_map(bufnr, "i", "<C-x><C-x>", "<cmd> LspSignatureHelp<CR>")
-
-    if client.resolved_capabilities.document_formatting then
-        vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()")
-    end
 end
 
 lspconfig.tsserver.setup({
     on_attach = function(client, bufnr)
-        client.resolved_capabilities.document_formatting = false
-        client.resolved_capabilities.document_range_formatting = false
+        client.server_capabilities.document_formatting = false
+        client.server_capabilities.document_range_formatting = false
 
         local ts_utils = require("nvim-lsp-ts-utils")
         ts_utils.setup({})
@@ -54,11 +50,18 @@ lspconfig.tsserver.setup({
     end,
 })
 
+lspconfig.rust_analyzer.setup({
+    on_attach = on_attach
+})
+
 null_ls.setup({
     sources = {
         null_ls.builtins.diagnostics.eslint_d,
         null_ls.builtins.code_actions.eslint_d,
         null_ls.builtins.formatting.prettier,
     },
-    on_attach = on_attach,
+    on_attach = function(client, bufnr)
+      vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.format()")
+      on_attach(client, bufnr)
+    end,
 })

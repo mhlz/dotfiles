@@ -4,7 +4,7 @@ vim.opt["hidden"] = true
 
 vim.opt["signcolumn"] = "yes"
 vim.opt["tabstop"] = 2
-vim.opt["shiftwidth"] = 4
+vim.opt["shiftwidth"] = 2
 
 vim.opt["autoread"] = true
 

@@ -9,22 +9,11 @@
 #
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
 
-exec_always xrandr --output DP-1 --rate 120.0 --mode 3840x2160
-exec_always xrandr --output DP-3 --left-of DP-1 --mode 3840x2160 --rate 60
-exec_always xrandr --output DP-2 --right-of DP-1 --mode 3840x2160 --rate 60
-exec_always xset r rate 150 66
-exec_always setxkbmap -option compose:ralt
-exec_always xinput set-prop "pointer:Logitech G502" "libinput Natural Scrolling Enabled" 1
-exec_always xinput set-prop "pointer:Logitech G502 LIGHTSPEED Wireless Gaming Mouse" "libinput Natural Scrolling Enabled" 1
-exec_always feh --bg-scale /home/mhlz/fuji.png
-exec_always ~/.config/i3/polybar.sh
-exec_always --no-startup-id killall picom; picom -b --experimental-backends
-
 set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango:SF Pro Display 10
+font pango:SF Pro Display 12
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
@@ -37,9 +26,14 @@ font pango:SF Pro Display 10
 # screen before suspend. Use loginctl lock-session to lock your screen.
 exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 
+exec --no-startup-id systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
 exec --no-startup-id nm-applet
+
+exec_always swaybg -i /home/mhlz/fuji.png
+exec_always --no-startup-id (killall waybar || true) && waybar
 
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status
@@ -52,7 +46,7 @@ bindsym Ctrl+F12 exec --no-startup-id ~/.config/i3/toggle-mute.sh
 
 gaps outer 5
 gaps inner 5
-for_window [class="^.*"] border pixel 2
+default_border pixel 2
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -60,7 +54,7 @@ floating_modifier $mod
 # start a terminal
 bindsym $mod+Return exec kitty
 
-bindsym $mod+ctrl+q exec i3lock
+bindsym $mod+s exec grimshot copy area
 
 # kill focused window
 bindsym $mod+q kill
@@ -70,7 +64,8 @@ bindsym $mod+q kill
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
-bindsym $mod+d exec .config/rofi/launchers/ribbon/launcher.sh
+bindsym $mod+d exec --no-startup-id wofi -S drun
+#bindsym $mod+d exec .config/rofi/launchers/ribbon/launcher.sh
 
 # change focus
 bindsym $mod+h focus left
@@ -106,15 +101,14 @@ bindsym $mod+g split v
 bindsym $mod+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
-bindsym $mod+s layout stacking
 bindsym $mod+w layout tabbed
 bindsym $mod+e layout toggle split
 
 # toggle tiling / floating
-bindsym $mod+Shift+space floating toggle
+#bindsym $mod+Shift+space floating toggle
 
 # change focus between tiling / floating windows
-bindsym $mod+space focus mode_toggle
+#bindsym $mod+space focus mode_toggle
 
 # focus the parent container
 bindsym $mod+a focus parent
@@ -193,51 +187,62 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
-# Start i3bar to display a workspace bar (plus the system information i3status
-# finds out, if available)
-#bar {
-#        i3bar_command i3bar --transparency
-#
-#        workspace_min_width 30
-#
-#        colors {
-#            background #00000000
-#
-#            focused_workspace  #bf6f00 #bf6f00 #ffffff
-#            active_workspace   #333333 #5f676a #ffffff
-#            inactive_workspace #333333 #222222 #888888
-#            urgent_workspace   #2f343a #900000 #ffffff
-#            binding_mode       #2f343a #900000 #ffffff
-#        }
-#
-#        status_command i3status
-#        position top
-#
-#        tray_output primary
-#
-#        font pango:SF Pro Display 10
-#}
-
 set $color "#bf6f00"
 
 client.focused $color $color #ffffff #ff0000 $color
 
-bindsym $mod+Shift+s exec /usr/bin/flameshot gui
 bindsym $mod+t move workspace to output right
+bindsym $mod+shift+s exec grim -g "$(slurp -d)" - | wl-copy -t "image/png"
+bindsym $mod+ctrl+q exec swaylock
+bindsym $mod+escape exec --no-startup-id makoctl dismiss -a
 
-bindsym --release $mod+v exec --no-startup-id ~/.config/i3/ctrl-shift.sh v
-bindsym --release $mod+c exec --no-startup-id ~/.config/i3/ctrl-shift.sh c
-bindsym --release $mod+x exec --no-startup-id ~/.config/i3/ctrl-shift.sh x
+output DP-3 {
+    scale 2
+    position 0 0
+}
+output DP-5 {
+    scale 2
+    position 1920 0
+}
+output DP-2 {
+    scale 2
+    position 3840 0
+}
+output DP-1 {
+    scale 2
+    position 1920 0
+    resolution 3840x2160@144Hz
+}
+output HDMI-A-1 {
+    scale 2
+    position 0 0
+}
+output HDMI-A-2 {
+    scale 2
+    position 0 0
+}
+output HDMI-A-3 {
+    scale 2
+    position 0 0
+}
 
-bindsym $mod+Escape exec dunstctl close-all
+input type:keyboard {
+    repeat_delay 150
+    repeat_rate 66
 
-title_align center
+    xkb_options compose:ralt
+}
 
-exec --no-startup-id dunst
-exec --no-startup-id pasystray
-exec --no-startup-id blueman-applet
+exec --no-startup-id mako
 
-exec --no-startup-id discord
-exec --no-startup-id telegram-desktop
+input "1133:16511:Logitech_G502" {
+    natural_scroll enabled
+    scroll_factor 2
+    pointer_accel -0.7
+}
 
-exec --no-startup-id "i3-msg 'workspace 4; append_layout /home/mhlz/.i3/workspace-1.json'"
+input type:mouse {
+    natural_scroll enabled
+    scroll_factor 3
+    pointer_accel -0.7
+}
