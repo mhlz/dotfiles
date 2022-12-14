@@ -9,4 +9,4 @@ require("lightline-config")
 
 require("keybinds")
 
-vim.cmd("colorscheme omni")
+vim.cmd("colorscheme tokyonight-night")

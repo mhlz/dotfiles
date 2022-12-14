@@ -33,7 +33,8 @@ return require('packer').startup(function(use)
 
   use "nvim-telescope/telescope.nvim"
 
-  use "yonlu/omni.vim"
+  use 'folke/tokyonight.nvim'
+  use "rafamadriz/neon"
 
   use "itchyny/lightline.vim"
 
