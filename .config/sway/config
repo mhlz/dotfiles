@@ -235,14 +235,7 @@ input type:keyboard {
 
 exec --no-startup-id mako
 
-input "1133:16511:Logitech_G502" {
+input type:pointer {
     natural_scroll enabled
     scroll_factor 2
-    pointer_accel -0.7
-}
-
-input type:mouse {
-    natural_scroll enabled
-    scroll_factor 3
-    pointer_accel -0.7
 }
