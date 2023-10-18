@@ -19,3 +19,4 @@ vim.api.nvim_set_keymap('', '<C-K>', '<C-W>k', {noremap = true})
 vim.api.nvim_set_keymap('', '<C-L>', '<C-W>l', {noremap = true})
 vim.api.nvim_set_keymap('', '<C-H>', '<C-W>h', {noremap = true})
 
+vim.api.nvim_set_keymap('', '<C-N>', ':NvimTreeToggle<CR>', {noremap = true})

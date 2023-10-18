@@ -13,7 +13,9 @@ return require('packer').startup(function(use)
   use "nvim-lua/popup.nvim"
 
   use { "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" }
-  use "p00f/nvim-ts-rainbow"
+  use "hiphish/rainbow-delimiters.nvim"
+
+  use { "stevedylandev/flexoki-nvim", as = "flexoki" }
   
   use "neovim/nvim-lspconfig"
   use "jose-elias-alvarez/null-ls.nvim"
@@ -33,10 +35,22 @@ return require('packer').startup(function(use)
 
   use "nvim-telescope/telescope.nvim"
 
+  use "https://codeberg.org/esensar/nvim-dev-container"
+
   use 'folke/tokyonight.nvim'
   use "rafamadriz/neon"
 
   use "itchyny/lightline.vim"
+
+  use "nvim-tree/nvim-web-devicons"
+  use "nvim-tree/nvim-tree.lua"
+
+  use "stevearc/aerial.nvim"
+
+  use "github/copilot.vim"
+
+  use "windwp/nvim-ts-autotag"
+  use 'windwp/nvim-projectconfig'
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins

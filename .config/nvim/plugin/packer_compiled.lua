@@ -49,8 +49,8 @@ local function save_profiles(threshold)
 end
 
 time([[Luarocks path setup]], true)
-local package_path_str = "/home/mhlz/.cache/nvim/packer_hererocks/2.1.0-beta3/share/lua/5.1/?.lua;/home/mhlz/.cache/nvim/packer_hererocks/2.1.0-beta3/share/lua/5.1/?/init.lua;/home/mhlz/.cache/nvim/packer_hererocks/2.1.0-beta3/lib/luarocks/rocks-5.1/?.lua;/home/mhlz/.cache/nvim/packer_hererocks/2.1.0-beta3/lib/luarocks/rocks-5.1/?/init.lua"
-local install_cpath_pattern = "/home/mhlz/.cache/nvim/packer_hererocks/2.1.0-beta3/lib/lua/5.1/?.so"
+local package_path_str = "/home/mhlz/.cache/nvim/packer_hererocks/2.1.1694285958/share/lua/5.1/?.lua;/home/mhlz/.cache/nvim/packer_hererocks/2.1.1694285958/share/lua/5.1/?/init.lua;/home/mhlz/.cache/nvim/packer_hererocks/2.1.1694285958/lib/luarocks/rocks-5.1/?.lua;/home/mhlz/.cache/nvim/packer_hererocks/2.1.1694285958/lib/luarocks/rocks-5.1/?/init.lua"
+local install_cpath_pattern = "/home/mhlz/.cache/nvim/packer_hererocks/2.1.1694285958/lib/lua/5.1/?.so"
 if not string.find(package.path, package_path_str, 1, true) then
   package.path = package.path .. ';' .. package_path_str
 end
@@ -74,6 +74,11 @@ end
 time([[try_loadstring definition]], false)
 time([[Defining packer_plugins]], true)
 _G.packer_plugins = {
+  ["aerial.nvim"] = {
+    loaded = true,
+    path = "/home/mhlz/.local/share/nvim/site/pack/packer/start/aerial.nvim",
+    url = "https://github.com/stevearc/aerial.nvim"
+  },
   ["cmp-buffer"] = {
     loaded = true,
     path = "/home/mhlz/.local/share/nvim/site/pack/packer/start/cmp-buffer",
@@ -98,6 +103,16 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/mhlz/.local/share/nvim/site/pack/packer/start/cmp-vsnip",
     url = "https://github.com/hrsh7th/cmp-vsnip"
+  },
+  ["copilot.vim"] = {
+    loaded = true,
+    path = "/home/mhlz/.local/share/nvim/site/pack/packer/start/copilot.vim",
+    url = "https://github.com/github/copilot.vim"
+  },
+  flexoki = {
+    loaded = true,
+    path = "/home/mhlz/.local/share/nvim/site/pack/packer/start/flexoki",
+    url = "https://github.com/stevedylandev/flexoki-nvim"
   },
   ["leap.nvim"] = {
     loaded = true,
@@ -124,6 +139,11 @@ _G.packer_plugins = {
     path = "/home/mhlz/.local/share/nvim/site/pack/packer/start/nvim-cmp",
     url = "https://github.com/hrsh7th/nvim-cmp"
   },
+  ["nvim-dev-container"] = {
+    loaded = true,
+    path = "/home/mhlz/.local/share/nvim/site/pack/packer/start/nvim-dev-container",
+    url = "https://codeberg.org/esensar/nvim-dev-container"
+  },
   ["nvim-lsp-ts-utils"] = {
     loaded = true,
     path = "/home/mhlz/.local/share/nvim/site/pack/packer/start/nvim-lsp-ts-utils",
@@ -134,15 +154,30 @@ _G.packer_plugins = {
     path = "/home/mhlz/.local/share/nvim/site/pack/packer/start/nvim-lspconfig",
     url = "https://github.com/neovim/nvim-lspconfig"
   },
+  ["nvim-projectconfig"] = {
+    loaded = true,
+    path = "/home/mhlz/.local/share/nvim/site/pack/packer/start/nvim-projectconfig",
+    url = "https://github.com/windwp/nvim-projectconfig"
+  },
+  ["nvim-tree.lua"] = {
+    loaded = true,
+    path = "/home/mhlz/.local/share/nvim/site/pack/packer/start/nvim-tree.lua",
+    url = "https://github.com/nvim-tree/nvim-tree.lua"
+  },
   ["nvim-treesitter"] = {
     loaded = true,
     path = "/home/mhlz/.local/share/nvim/site/pack/packer/start/nvim-treesitter",
     url = "https://github.com/nvim-treesitter/nvim-treesitter"
   },
-  ["nvim-ts-rainbow"] = {
+  ["nvim-ts-autotag"] = {
     loaded = true,
-    path = "/home/mhlz/.local/share/nvim/site/pack/packer/start/nvim-ts-rainbow",
-    url = "https://github.com/p00f/nvim-ts-rainbow"
+    path = "/home/mhlz/.local/share/nvim/site/pack/packer/start/nvim-ts-autotag",
+    url = "https://github.com/windwp/nvim-ts-autotag"
+  },
+  ["nvim-web-devicons"] = {
+    loaded = true,
+    path = "/home/mhlz/.local/share/nvim/site/pack/packer/start/nvim-web-devicons",
+    url = "https://github.com/nvim-tree/nvim-web-devicons"
   },
   ["packer.nvim"] = {
     loaded = true,
@@ -158,6 +193,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/mhlz/.local/share/nvim/site/pack/packer/start/popup.nvim",
     url = "https://github.com/nvim-lua/popup.nvim"
+  },
+  ["rainbow-delimiters.nvim"] = {
+    loaded = true,
+    path = "/home/mhlz/.local/share/nvim/site/pack/packer/start/rainbow-delimiters.nvim",
+    url = "https://github.com/hiphish/rainbow-delimiters.nvim"
   },
   ["telescope.nvim"] = {
     loaded = true,
