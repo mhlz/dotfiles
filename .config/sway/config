@@ -26,6 +26,7 @@ font pango:SF Pro Display 12
 # screen before suspend. Use loginctl lock-session to lock your screen.
 exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 
+exec --no-startup-id dbus-update-activation-environment DISPLAY XAUTHORITY WAYLAND_DISPLAY
 exec --no-startup-id systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 
 # NetworkManager is the most popular way to manage wireless networks on Linux,
@@ -52,7 +53,7 @@ default_border pixel 2
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec kitty
+bindsym $mod+Return exec wezterm
 
 bindsym $mod+s exec grimshot copy area
 
@@ -206,7 +207,7 @@ output DP-5 {
 }
 output DP-2 {
     scale 2
-    position 3840 0
+    position 0 0
 }
 output DP-1 {
     scale 2
@@ -215,7 +216,7 @@ output DP-1 {
 }
 output HDMI-A-1 {
     scale 2
-    position 0 0
+    position 3840 0
 }
 output HDMI-A-2 {
     scale 2
@@ -233,7 +234,9 @@ input type:keyboard {
     xkb_options compose:ralt
 }
 
+exec --no-startup-id easyeffects
 exec --no-startup-id mako
+exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 
 input type:pointer {
     natural_scroll enabled
