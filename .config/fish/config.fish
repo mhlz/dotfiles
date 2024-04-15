@@ -37,3 +37,13 @@ if [ -f '/Users/mhlz/homefully/sandbox/google-cloud-sdk/path.fish.inc' ]; . '/Us
 # <<< conda initialize <<<
 
 starship init fish | source
+
+# pnpm
+set -gx PNPM_HOME "/home/mhlz/.local/share/pnpm"
+if not string match -q -- $PNPM_HOME $PATH
+  set -gx PATH "$PNPM_HOME" $PATH
+end
+# pnpm end
+# bun
+set --export BUN_INSTALL "$HOME/.bun"
+set --export PATH $BUN_INSTALL/bin $PATH
