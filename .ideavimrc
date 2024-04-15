@@ -1,9 +1,11 @@
 set nu
 set rnu
 set scrolloff=15
-set smartcase
+set ignorecase smartcase
 set wrapscan
 set surround
+
+set incsearch
 
 nmap <leader>f  :action ReformatCode<CR>
 xmap <leader>f  :action ReformatCode<CR>
@@ -20,5 +22,10 @@ nnoremap <leader>p "+p
 vnoremap <leader>p "+p
 vnoremap <leader>x "+d
 nnoremap <silent> <Esc> :nohl<CR>
+
+nnoremap <C-E> :action GotoNextError<CR>
+nnoremap ff :action ShowIntentionActions<CR>
+
+nnoremap gd :action GotoDeclaration<CR>
 
 nnoremap <leader>rn :action RenameElement<CR>
