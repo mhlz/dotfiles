@@ -3,3 +3,5 @@
 -- Add any additional keymaps here
 
 local map = vim.keymap.set
+
+vim.g.copilot_no_tab_map = false
