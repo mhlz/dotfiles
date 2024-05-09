@@ -1,5 +1,5 @@
 * {
-    font-family: FiraCode , Noto Sans,FontAwesome, Roboto, Helvetica, Arial, sans-serif;
+    font-family: JetBrainsCode, Noto Sans,FontAwesome, Roboto, Helvetica, Arial, sans-serif;
     font-size: 13px;
 }
 
@@ -332,3 +332,16 @@ window#waybar {
     background-color: #eb4d4b;
 }
 
+tooltip {
+  border-radius: 10px;
+  background-color: #11111b;
+  color:#a6e3a1;
+}
+
+tooltip * {
+  color: #b4befe;
+}
+
+.today {
+  color: red;
+}
