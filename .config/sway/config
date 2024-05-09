@@ -55,7 +55,7 @@ default_border pixel 2
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec wezterm
+bindsym $mod+Return exec kitty
 
 bindsym $mod+s exec grimshot copy area
 
