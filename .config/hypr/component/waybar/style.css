@@ -86,7 +86,7 @@ window#waybar {
   padding-right: 20px;
   box-shadow: rgba(0, 0, 0, 0.288) 2 2 5 2px;
   padding-left: 20px;
-  padding-bottom: 3px;
+  padding-bottom: 2px;
   background: rgb(203, 166, 247);
   background: radial-gradient(
     circle,
