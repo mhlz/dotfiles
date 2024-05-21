@@ -1,8 +1,8 @@
 return {
   {
-    "L3MON4D3/LuaSnip",
+    "nvim-cmp",
     keys = {
-      { "<tab>", false, mode = "i" },
+      { "<Tab>", false, mode = "i" },
     },
   },
 }
