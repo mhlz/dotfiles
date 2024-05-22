@@ -3,3 +3,5 @@
 -- Add any additional options here
 
 vim.opt.clipboard = ""
+
+vim.g.minipairs_disable = true
