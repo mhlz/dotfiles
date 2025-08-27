@@ -3,5 +3,11 @@
 -- Add any additional keymaps here
 
 local map = vim.keymap.set
-
-vim.g.copilot_no_tab_map = false
+-- vim.keymap.del("n", "]e")
+-- vim.keymap.del("n", "[e")
+-- vim.keymap.del("n", "gd")
+--
+-- map("n", "[e", "<Plug>(coc-diagnostic-prev)", { silent = true })
+-- map("n", "]e", "<Plug>(coc-diagnostic-next)", { silent = true })
+--
+-- map("n", "gd", "<Plug>(coc-definition)", { silent = true })

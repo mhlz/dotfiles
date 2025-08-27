@@ -4,4 +4,7 @@
 
 vim.opt.clipboard = ""
 
+vim.o.exrc = true
+
 vim.g.minipairs_disable = true
+vim.g.snacks_scroll = false
